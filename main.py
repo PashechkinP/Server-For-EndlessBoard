@@ -28,6 +28,7 @@ origins = [
     "http://localhost",
     "http://localhost:3000",
     "http://localhost:8000",
+    "http://localhost:8000/",
     "https://127.0.0.1",
     "http://127.0.0.1:8000/"
 ]
@@ -35,7 +36,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],  # Разрешить все методы
+    allow_methods=["GET", "POST", "OPTIONS", "DELETE", "PUT"],  # Разрешить все методы
     allow_headers=["*"],  # Разрешить все заголовки
     expose_headers=["*"]
 )

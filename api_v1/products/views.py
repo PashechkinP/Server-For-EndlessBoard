@@ -60,7 +60,7 @@ async def update_product_partial(
     )
 
 
-@router.delete("/{product_id}/", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{product_id}/del", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_product(
     product: Product = Depends(product_by_id),
     session: AsyncSession = Depends(db_helper.scoped_session_dependency),
