@@ -3,7 +3,8 @@ from core.models import Product  # Добавление аннотации ти�
 from sqlalchemy.engine import Result  # для аннотирования свойства (что бы это не значило...)
 from sqlalchemy import select  # инструмент для создания запросов
 
-from .schemas import ProductCreate, ProductUpdate, ProductUpdatePartial
+from core.models import Userok
+from .schemas import ProductCreate, ProductUpdate, ProductUpdatePartial, UserokCreate
 
 
 # Чтение всех товаров ( объявлений для EndlessBoard)
@@ -27,6 +28,15 @@ async def product_create(session: AsyncSession, product_in: ProductCreate) -> Pr
     await session.commit()  # сохранение товара в базу данных
     # await session.refresh(product)
     return product
+
+
+async def userok_create(session: AsyncSession, userok_in: UserokCreate) -> Userok:
+    userok = Userok(**userok_in.model_dump())  # словарик распаковывается по ключам
+    session.add(userok)  # добавление в сессиию для отслеживания, просто надо
+    await session.commit()  # сохранение товара в базу данных
+    # await session.refresh(product)
+    return userok
+
 
 # Это апдейт всего объекта
 # async def update_product(
@@ -56,10 +66,10 @@ async def product_create(session: AsyncSession, product_in: ProductCreate) -> Pr
 
 # Это гибрид верхних двух
 async def update_product(
-    session: AsyncSession,
-    product: Product,
-    product_update: ProductUpdate | ProductUpdatePartial,
-    partial: bool = False,
+        session: AsyncSession,
+        product: Product,
+        product_update: ProductUpdate | ProductUpdatePartial,
+        partial: bool = False,
 ) -> Product:
     for name, value in product_update.model_dump(exclude_unset=partial).items():
         setattr(product, name, value)
@@ -68,8 +78,8 @@ async def update_product(
 
 
 async def delete_product(
-    session: AsyncSession,
-    product: Product,
+        session: AsyncSession,
+        product: Product,
 ) -> None:
     await session.delete(product)
     await session.commit()
